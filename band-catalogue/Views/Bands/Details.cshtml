@@ -1,0 +1,34 @@
+@model band_catalogue.Models.Band
+@{
+    ViewData["Title"] = "Band Details";
+}
+
+<h2>@Model.BandName</h2>
+<p><strong>Genre:</strong>@Model.Genre</p>
+<p><strong>Country:</strong>@Model.Country</p>
+<p><strong>Year Formed:</strong>@Model.FormedYear</p>
+
+<h3>Albums</h3>
+@if (Model.Albums.Any())
+{
+    <ul>
+        @foreach (var album in Model.Albums)
+        {
+            <li>
+                <strong>@album.Title ></strong> (@album.ReleaseYear)
+                <ul>
+                    @foreach (var song in album.Songs)
+                    {
+                        <li>@song.Title (@song.Duration.ToString(@"mm\:ss"))</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No albums found for this band.</p>
+}
+
+<a asp-action="Index">Back to List</a>
