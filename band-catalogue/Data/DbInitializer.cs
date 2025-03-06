@@ -11,17 +11,10 @@ namespace band_catalogue.Data
         {
             try
             {
-                Console.WriteLine("Ensuring database is created and migrations are applied...");
-
-                // Ensure database exists & apply migrations
-                context.Database.Migrate();
-
-                Console.WriteLine("Checking if database seeding is needed...");
-                if (context.Bands.Any())
-                {
-                    Console.WriteLine("Database already seeded. Skipping...");
-                    return;
-                }
+                Console.WriteLine("Dropping Database on Startup...");
+                context.Database.EnsureDeleted(); // Will drop the database and apply any pending migrations
+                Console.WriteLine("Applying Migrations on Startup...");
+                context.Database.Migrate(); // Will create the database and apply any pending migrations
 
                 Console.WriteLine("Seeding database with initial data...");
 
