@@ -1,0 +1,32 @@
+@model band_catalogue.Models.Band
+
+<h2>Add New Band</h2>
+
+<form asp-action="Create">
+    <div class="mb-3">
+        <label class="form-label">Band Name</label>
+        <input asp-for="BandName" class="form-control" />
+        <span asp-validation-for="BandName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Genre</label>
+        <input asp-for="Genre" class="form-control" />
+        <span asp-validation-for="Genre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Country</label>
+        <input asp-for="Country" class="form-control" />
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Year Formed</label>
+        <input asp-for="FormedYear" type="number" class="form-control" />
+        <span asp-validation-for="FormedYear" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Band</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

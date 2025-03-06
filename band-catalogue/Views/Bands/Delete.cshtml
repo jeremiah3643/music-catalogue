@@ -1,0 +1,15 @@
+@model band_catalogue.Models.Band
+
+<h2>Confirm Delete</h2>
+<p>Are you sure you want to delete the band <strong>@Model.BandName</strong>?</p>
+
+@if (Model.Albums.Any())
+{
+    <p class="text-danger"><strong>Warning:</strong> This band has albums associated with it.</p>
+}
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="BandId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

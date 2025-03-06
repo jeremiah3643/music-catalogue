@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<band_catalogue.Models.Band>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to the Band Catalogue</h1>
+    <p>Here you can find information about your favorite bands.</p>
+    <a asp-controller="Bands" asp-action="Index" class="btn btn-primary">View Bands</a>
 </div>

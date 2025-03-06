@@ -1,13 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using band_catalogue.Data;
 using band_catalogue.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-[ApiController]
-[Route("api/bands")]
-public class BandsController : ControllerBase
+public class BandsController : Controller
 {
     private readonly ApplicationDbContext _context;
 
@@ -16,45 +12,88 @@ public class BandsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/bands
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Band>>> GetBands()
+    public async Task<IActionResult> Index()
     {
-        return await _context.Bands.Include(b => b.Albums).ToListAsync();
+        return View(await _context.Bands.ToListAsync());
     }
 
-    // GET: api/bands/{id}
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Band>> GetBand(int id)
+    public async Task<IActionResult> Details(int id)
     {
-        var band = await _context.Bands.Include(b => b.Albums)
-                                       .ThenInclude(a => a.Songs)
-                                       .FirstOrDefaultAsync(b => b.BandId == id);
-
+        var band = await _context.Bands
+            .Include(b => b.Albums)
+            .ThenInclude(a => a.Songs)
+            .FirstOrDefaultAsync(m => m.BandId == id);
         if (band == null) return NotFound();
-
-        return band;
+        return View(band);
     }
 
-    // POST: api/bands
-    [HttpPost]
-    public async Task<ActionResult<Band>> CreateBand(Band band)
+    public IActionResult Create()
     {
-        _context.Bands.Add(band);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetBand), new { id = band.BandId }, band);
+        return View();
     }
 
-    // DELETE: api/bands/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteBand(int id)
+     [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("BandId,BandName,Genre,Country,FormedYear")] Band band)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Add(band);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(band);
+    }
+
+   // GET: Bands/Edit/{id}
+    public async Task<IActionResult> Edit(int id)
     {
         var band = await _context.Bands.FindAsync(id);
-        if (band == null) return NotFound();
+        if (band == null)
+        {
+            return NotFound();
+        }
+        return View(band);
+    }
 
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Band band)
+    {
+        if (id != band.BandId) return NotFound();
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(band);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Bands.Any(e => e.BandId == id)) return NotFound();
+                else throw;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        return View(band);
+    }
+    public async Task<IActionResult> Delete(int id)
+    {
+        var band = await _context.Bands.FirstOrDefaultAsync(m => m.BandId == id);
+        if (band == null) return NotFound();
+        return View(band);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var band = await _context.Bands.FindAsync(id);
         _context.Bands.Remove(band);
         await _context.SaveChangesAsync();
-
-        return NoContent();
+        return RedirectToAction(nameof(Index));
     }
+
 }

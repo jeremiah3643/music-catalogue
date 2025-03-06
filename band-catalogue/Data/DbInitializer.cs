@@ -12,7 +12,7 @@ namespace band_catalogue.Data
             try
             {
                 Console.WriteLine("Dropping Database on Startup...");
-                context.Database.EnsureDeleted(); // Will drop the database and apply any pending migrations
+                context.Database.EnsureDeleted(); // Will drop the database
                 Console.WriteLine("Applying Migrations on Startup...");
                 context.Database.Migrate(); // Will create the database and apply any pending migrations
 
@@ -68,7 +68,8 @@ namespace band_catalogue.Data
                     new Song { Title = "Love of My Life", Duration = TimeSpan.FromMinutes(3.38), Album = albums[4] },
                     new Song { Title = "Battery", Duration = TimeSpan.FromMinutes(5.12), Album = albums[9] },
                     new Song { Title = "Master of Puppets", Duration = TimeSpan.FromMinutes(8.35), Album = albums[9] },
-                    new Song { Title = "Welcome Home (Sanitarium)", Duration = TimeSpan.FromMinutes(6.27), Album = albums[9] }
+                    new Song { Title = "Welcome Home (Sanitarium)", Duration = TimeSpan.FromMinutes(6.27), Album = albums[9] },
+                    new Song { Title = "Getting In Tune", Duration = TimeSpan.FromMinutes(4.50), Album = albums[5] }
                 };
 
                 context.Songs.AddRange(songs);
