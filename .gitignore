@@ -1,0 +1,47 @@
+# Ignore the bin and obj directories (build artifacts)
+bin/
+obj/
+
+# Ignore user-specific Visual Studio/JetBrains Rider files
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore logs and temporary files
+logs/
+*.log
+*.tlog
+
+# Ignore database files (if using SQLite)
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+
+# Ignore Entity Framework Migrations (optional, but recommended if you regenerate often)
+Migrations/
+
+# Ignore compiled DLLs and EXEs
+*.exe
+*.dll
+*.pdb
+*.appx
+*.nupkg
+*.snupkg
+
+# Ignore IDE-specific files
+*.ide/
+.idea/
+*.iml
+
+# Ignore coverage reports
+coverage/
+*.cov
+
+# Ignore environment config
+.env
+*.secrets.json
+
