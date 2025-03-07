@@ -50,5 +50,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
 app.UseStaticFiles();
-app.Run();
+app.Run("http://localhost:5295");
 

@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using band_catalogue.Models;
 
+// Creates the database and seeds it with initial data
 namespace band_catalogue.Data
 {
     public static class DbInitializer

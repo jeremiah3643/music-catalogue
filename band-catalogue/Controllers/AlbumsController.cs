@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
 
+
+// I am using MVCs so this is not a true REST API, but it does conform to the RESTful principles
+// of using HTTP methods to perform CRUD operations on resources.
 public class AlbumsController : Controller
 {
     private readonly ApplicationDbContext _context;
