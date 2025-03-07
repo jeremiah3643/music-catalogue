@@ -114,10 +114,13 @@ public class SongsController : Controller
         var song = await _context.Songs.FindAsync(id);
         if (song != null)
         {
+            int albumId = song.AlbumId;
             _context.Songs.Remove(song);
             await _context.SaveChangesAsync();
+            return RedirectToAction("Index", new { albumId });
         }
 
-        return RedirectToAction("Index", new { albumId = song.AlbumId });
+        return NotFound();
     }
+
 }

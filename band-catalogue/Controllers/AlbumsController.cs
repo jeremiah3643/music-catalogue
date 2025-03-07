@@ -109,7 +109,7 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
     }
 
 
-    [HttpGet]
+ [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
         var album = await _context.Albums
@@ -117,11 +117,10 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
             .FirstOrDefaultAsync(m => m.AlbumId == id);
 
         if (album == null) return NotFound();
-
         return View(album); // Show confirmation page
     }
 
-    [HttpPost, ActionName("DeleteConfirmed")]
+    [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
@@ -130,13 +129,7 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
         {
             _context.Albums.Remove(album);
             await _context.SaveChangesAsync();
-            Console.WriteLine($"Deleted Album: {album.Title}");
         }
-        else
-        {
-            Console.WriteLine($"Attempted to delete a non-existing album with ID {id}");
-        }
-
         return RedirectToAction(nameof(Index));
     }
 }

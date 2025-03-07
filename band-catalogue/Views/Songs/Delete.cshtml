@@ -12,7 +12,7 @@
     <p><strong>Duration:</strong> @Model.Duration</p>
 </div>
 
-<form asp-action="DeleteConfirmed" method="post">
+<form asp-action="Delete" method="post">
     <input type="hidden" name="id" value="@Model.SongId" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="Index" asp-route-albumId="@Model.AlbumId" class="btn btn-secondary">Cancel</a>
