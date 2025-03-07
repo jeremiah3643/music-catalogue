@@ -4,11 +4,11 @@
 Band Catalogue is a **C# ASP.NET MVC web application** that allows users to manage albums and songs. It includes **CRUD operations** for albums and songs, utilizing **Entity Framework Core** with a SQL database.
 
 ## Features
-- View a list of albums and their songs
-- View album and song details
-- Add new albums and songs
-- Edit album and song details
-- Delete albums and songs with confirmation prompts
+- View a list of Bands, albums and their songs
+- View band, album and song details
+- Add new bands, albums and songs
+- Edit band, album and song details
+- Delete bands, albums and songs with confirmation prompts
 - Uses **ASP.NET Core MVC** for the UI
 - Implements **RESTful operations**
 - Uses **Entity Framework Core** for database interaction
@@ -17,7 +17,6 @@ Band Catalogue is a **C# ASP.NET MVC web application** that allows users to mana
 - **ASP.NET Core MVC**
 - **Entity Framework Core**
 - **SQL lite Database**
-- **Bootstrap (for styling)**
 - **C#**
 
 ## Getting Started
@@ -26,3 +25,30 @@ Band Catalogue is a **C# ASP.NET MVC web application** that allows users to mana
 ```sh
 git clone https://github.com/YOUR_GITHUB_USERNAME/band-catalogue.git
 cd band-catalogue
+```
+
+### 2. Initialize Database and Migrate
+- **Ensure SQLite is installed**
+- **Ensure EF Core Tools are installed**
+```sh
+dotnet tool install --global dotnet-ef
+```
+- **Create Initial Migration**
+```sh
+dotnet ef migrations add InitialCreate
+```
+- **Apply Migration**
+```sh
+dotnet ef database update
+```
+- **Run Program**
+```sh
+dotnet watch run
+```
+
+### 3. Using Application
+- Home Page gives buttons for Bands and Albums
+- Clicking either will take you to their respective pages
+- Can add, edit, or delete bands, and albums
+- Includes details page
+- In the albums page you can go into details to view songs and add edit or delete those also
