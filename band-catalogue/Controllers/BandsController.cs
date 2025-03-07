@@ -3,6 +3,9 @@ using band_catalogue.Data;
 using band_catalogue.Models;
 using Microsoft.EntityFrameworkCore;
 
+
+// I am using MVCs so this is not a true REST API, but it does conform to the RESTful principles
+// of using HTTP methods to perform CRUD operations on resources.
 public class BandsController : Controller
 {
     private readonly ApplicationDbContext _context;
