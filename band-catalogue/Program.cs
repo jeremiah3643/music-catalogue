@@ -9,11 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        // Got stuck in a loop with Albums referencing Bands and Bands referencing Albums
+        // This will prevent the serializer from getting stuck in a loop
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true; 
+    });
+
 
 var app = builder.Build();
 
-app.UseStaticFiles();
+
 app.UseRouting();
 app.UseAuthorization();
 app.UseHttpsRedirection();
@@ -40,5 +48,7 @@ using (var scope = app.Services.CreateScope())
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapControllers();
+app.UseStaticFiles();
 app.Run();
+

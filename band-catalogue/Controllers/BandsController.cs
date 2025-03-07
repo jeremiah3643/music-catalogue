@@ -32,7 +32,7 @@ public class BandsController : Controller
         return View();
     }
 
-     [HttpPost]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("BandId,BandName,Genre,Country,FormedYear")] Band band)
     {

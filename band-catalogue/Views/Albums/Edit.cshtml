@@ -1,0 +1,32 @@
+@model band_catalogue.Models.Album
+
+@{
+    ViewData["Title"] = "Edit Album";
+}
+
+<h2>Edit Album</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="AlbumId" />
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReleaseYear" class="control-label"></label>
+        <input asp-for="ReleaseYear" class="form-control" />
+        <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BandId" class="control-label">Band</label>
+        <select asp-for="BandId" class="form-control" asp-items="ViewBag.Bands"></select>
+        <span asp-validation-for="BandId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

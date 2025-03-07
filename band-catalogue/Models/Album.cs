@@ -18,7 +18,8 @@ namespace band_catalogue.Models
         // Foreign Key linking the Album to a Band
         [ForeignKey("Band")]
         public int BandId { get; set; }
-        public Band Band { get; set; }
+        // Make nullable
+        public Band? Band { get; set; }
 
         // One-to-Many: An Album can have multiple Songs
         public List<Song> Songs { get; set; } = new List<Song>();

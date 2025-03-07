@@ -1,0 +1,44 @@
+@model IEnumerable<band_catalogue.Models.Album>
+
+<h2>Albums</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Band Name</th>
+            <th>Album Title</th>
+            <th>Release Year</th>
+            <th>Total Length</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Band.BandName</td> 
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.AlbumId">@item.Title</a> 
+                </td>
+                <td>@item.ReleaseYear</td>
+                <td>
+                @if (item.Songs.Any())
+                {
+                    @(TimeSpan.FromSeconds(item.Songs.Sum(s => s.Duration.TotalSeconds)).ToString(@"hh\:mm\:ss"))
+                }
+                else
+                {
+                <text>00:00:00</text>
+    }
+</td>
+<td>
+    <a asp-action="Details" asp-route-id="@item.AlbumId" class="btn btn-info">View Details</a>
+    <a asp-action="Edit" asp-route-id="@item.AlbumId" class="btn btn-warning">Edit</a>
+    <a asp-action="Delete" asp-route-id="@item.AlbumId" class="btn btn-danger">Delete</a>
+</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Add New Album</a> 

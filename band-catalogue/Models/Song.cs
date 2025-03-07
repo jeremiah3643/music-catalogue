@@ -18,6 +18,6 @@ namespace band_catalogue.Models
         // Foreign Key linking this song to an Album
         [ForeignKey("Album")]
         public int AlbumId { get; set; }
-        public Album Album { get; set; }
+        public Album? Album { get; set; }
     }
 }
