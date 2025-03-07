@@ -15,7 +15,6 @@ public class AlbumsController : Controller
         _context = context;
     }
 
-    // ✅ LIST: Show all albums
     public async Task<IActionResult> Index()
     {
         var albums = await _context.Albums
@@ -24,7 +23,6 @@ public class AlbumsController : Controller
         return View(albums);
     }
 
-    // ✅ DETAILS: Show details of a specific album
     public async Task<IActionResult> Details(int id)
     {
         var album = await _context.Albums
@@ -36,7 +34,6 @@ public class AlbumsController : Controller
         return View(album);
     }
 
-    // ✅ CREATE: Show form
     [HttpGet]
     public IActionResult Create()
     {
@@ -49,7 +46,7 @@ public class AlbumsController : Controller
 public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Album album)
 {
     // Log received values
-    Console.WriteLine($"📌 Received Album Data -> Title: {album.Title}, ReleaseYear: {album.ReleaseYear}, BandId: {album.BandId}");
+    Console.WriteLine($"Received Album Data -> Title: {album.Title}, ReleaseYear: {album.ReleaseYear}, BandId: {album.BandId}");
 
     if (!ModelState.IsValid)
     {
@@ -58,7 +55,7 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
             var errors = ModelState[key].Errors.Select(e => e.ErrorMessage).ToList();
             if (errors.Count > 0)
             {
-                Console.WriteLine($"❌ Validation Error - {key}: {string.Join(", ", errors)}");
+                Console.WriteLine($"Validation Error - {key}: {string.Join(", ", errors)}");
             }
         }
 
@@ -70,12 +67,11 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
     // Save album
     _context.Albums.Add(album);
     await _context.SaveChangesAsync();
-    Console.WriteLine("✅ Album successfully created!");
+    Console.WriteLine("Album successfully created!");
     return RedirectToAction(nameof(Index));
 }
 
 
-    // ✅ EDIT: Show form
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -86,7 +82,6 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
         return View(album);
     }
 
-    // ✅ EDIT: Handle form submission
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, Album album)
@@ -114,38 +109,34 @@ public async Task<IActionResult> Create([Bind("Title, ReleaseYear, BandId")] Alb
     }
 
 
-// ✅ GET: Show delete confirmation page
-[HttpGet]
-public async Task<IActionResult> Delete(int id)
-{
-    var album = await _context.Albums
-        .Include(a => a.Band)
-        .FirstOrDefaultAsync(m => m.AlbumId == id);
-
-    if (album == null) return NotFound();
-
-    return View(album); // Show confirmation page
-}
-
-// ✅ POST: Handle album deletion
-[HttpPost, ActionName("DeleteConfirmed")]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> DeleteConfirmed(int id)
-{
-    var album = await _context.Albums.FindAsync(id);
-    if (album != null)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
     {
-        _context.Albums.Remove(album);
-        await _context.SaveChangesAsync();
-        Console.WriteLine($"✅ Deleted Album: {album.Title}");
-    }
-    else
-    {
-        Console.WriteLine($"❌ Attempted to delete a non-existing album with ID {id}");
+        var album = await _context.Albums
+            .Include(a => a.Band)
+            .FirstOrDefaultAsync(m => m.AlbumId == id);
+
+        if (album == null) return NotFound();
+
+        return View(album); // Show confirmation page
     }
 
-    return RedirectToAction(nameof(Index));
-}
+    [HttpPost, ActionName("DeleteConfirmed")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var album = await _context.Albums.FindAsync(id);
+        if (album != null)
+        {
+            _context.Albums.Remove(album);
+            await _context.SaveChangesAsync();
+            Console.WriteLine($"Deleted Album: {album.Title}");
+        }
+        else
+        {
+            Console.WriteLine($"Attempted to delete a non-existing album with ID {id}");
+        }
 
-
+        return RedirectToAction(nameof(Index));
+    }
 }

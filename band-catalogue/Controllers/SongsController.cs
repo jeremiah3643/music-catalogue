@@ -15,7 +15,6 @@ public class SongsController : Controller
         _context = context;
     }
 
-    // ✅ LIST: Show all songs for an album
     public async Task<IActionResult> Index(int albumId)
     {
         var songs = await _context.Songs
@@ -28,7 +27,6 @@ public class SongsController : Controller
         return View(songs);
     }
 
-    // ✅ DETAILS: Show song details
     public async Task<IActionResult> Details(int id)
     {
         var song = await _context.Songs
@@ -39,7 +37,6 @@ public class SongsController : Controller
         return View(song);
     }
 
-    // ✅ CREATE: Show form
     [HttpGet]
     public IActionResult Create(int albumId)
     {
@@ -48,7 +45,6 @@ public class SongsController : Controller
         return View();
     }
 
-    // ✅ CREATE: Handle form submission
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Title, Duration, AlbumId")] Song song)
@@ -65,7 +61,7 @@ public class SongsController : Controller
         return RedirectToAction("Index", new { albumId = song.AlbumId });
     }
 
-    // ✅ EDIT: Show form
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -75,7 +71,6 @@ public class SongsController : Controller
         return View(song);
     }
 
-    // ✅ EDIT: Handle form submission
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, Song song)
@@ -101,7 +96,6 @@ public class SongsController : Controller
         return RedirectToAction("Index", new { albumId = song.AlbumId });
     }
 
-    // ✅ DELETE: Show confirmation page
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
@@ -113,7 +107,6 @@ public class SongsController : Controller
         return View(song);
     }
 
-    // ✅ DELETE: Handle form submission
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
