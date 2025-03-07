@@ -2,12 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using band_catalogue.Data;
 using band_catalogue.Models;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 using System.Threading.Tasks;
 
-[ApiController]
-[Route("api/songs")]
-public class SongsController : ControllerBase
+public class SongsController : Controller
 {
     private readonly ApplicationDbContext _context;
 
@@ -16,61 +15,116 @@ public class SongsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/songs
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Song>>> GetSongs()
+    // ✅ LIST: Show all songs for an album
+    public async Task<IActionResult> Index(int albumId)
     {
-        return await _context.Songs.Include(s => s.Album).ToListAsync();
+        var songs = await _context.Songs
+            .Where(s => s.AlbumId == albumId)
+            .Include(s => s.Album)
+            .ToListAsync();
+
+        ViewBag.Album = await _context.Albums.FindAsync(albumId);
+
+        return View(songs);
     }
 
-    // GET: api/songs/{id}
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Song>> GetSong(int id)
+    // ✅ DETAILS: Show song details
+    public async Task<IActionResult> Details(int id)
     {
-        var song = await _context.Songs.Include(s => s.Album)
-                                       .FirstOrDefaultAsync(s => s.SongId == id);
+        var song = await _context.Songs
+            .Include(s => s.Album)
+            .FirstOrDefaultAsync(s => s.SongId == id);
 
         if (song == null) return NotFound();
-        return song;
+        return View(song);
     }
 
-    // GET: api/songs/by-album/{albumId}
-    [HttpGet("by-album/{albumId}")]
-    public async Task<ActionResult<IEnumerable<Song>>> GetSongsByAlbum(int albumId)
+    // ✅ CREATE: Show form
+    [HttpGet]
+    public IActionResult Create(int albumId)
     {
-        var songs = await _context.Songs.Where(s => s.AlbumId == albumId).ToListAsync();
-        if (songs.Count == 0) return NotFound();
-        return songs;
+        ViewBag.AlbumId = albumId;
+        ViewBag.AlbumTitle = _context.Albums.Find(albumId)?.Title;
+        return View();
     }
 
-    // POST: api/songs
+    // ✅ CREATE: Handle form submission
     [HttpPost]
-    public async Task<ActionResult<Song>> CreateSong(Song song)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Title, Duration, AlbumId")] Song song)
     {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.AlbumId = song.AlbumId;
+            ViewBag.AlbumTitle = _context.Albums.Find(song.AlbumId)?.Title;
+            return View(song);
+        }
+
         _context.Songs.Add(song);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetSong), new { id = song.SongId }, song);
+        return RedirectToAction("Index", new { albumId = song.AlbumId });
     }
 
-    // PUT: api/songs/{id}
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSong(int id, Song song)
-    {
-        if (id != song.SongId) return BadRequest();
-        _context.Entry(song).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-        return NoContent();
-    }
-
-    // DELETE: api/songs/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteSong(int id)
+    // ✅ EDIT: Show form
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
     {
         var song = await _context.Songs.FindAsync(id);
         if (song == null) return NotFound();
 
-        _context.Songs.Remove(song);
-        await _context.SaveChangesAsync();
-        return NoContent();
+        return View(song);
+    }
+
+    // ✅ EDIT: Handle form submission
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Song song)
+    {
+        if (id != song.SongId) return NotFound();
+
+        if (!ModelState.IsValid)
+        {
+            return View(song);
+        }
+
+        try
+        {
+            _context.Update(song);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!_context.Songs.Any(e => e.SongId == id)) return NotFound();
+            throw;
+        }
+
+        return RedirectToAction("Index", new { albumId = song.AlbumId });
+    }
+
+    // ✅ DELETE: Show confirmation page
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var song = await _context.Songs
+            .Include(s => s.Album)
+            .FirstOrDefaultAsync(m => m.SongId == id);
+
+        if (song == null) return NotFound();
+        return View(song);
+    }
+
+    // ✅ DELETE: Handle form submission
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var song = await _context.Songs.FindAsync(id);
+        if (song != null)
+        {
+            _context.Songs.Remove(song);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("Index", new { albumId = song.AlbumId });
     }
 }

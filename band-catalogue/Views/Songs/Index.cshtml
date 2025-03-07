@@ -1,0 +1,32 @@
+@model IEnumerable<band_catalogue.Models.Song>
+
+@{
+    ViewData["Title"] = "Songs";
+}
+
+<h2>Songs for @ViewBag.Album.Title</h2>
+
+<a asp-action="Create" asp-route-albumId="@ViewBag.Album.AlbumId" class="btn btn-primary">Add Song</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Duration</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var song in Model)
+        {
+            <tr>
+                <td>@song.Title</td>
+                <td>@song.Duration</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@song.SongId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@song.SongId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

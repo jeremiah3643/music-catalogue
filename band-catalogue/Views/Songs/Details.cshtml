@@ -1,0 +1,16 @@
+@model band_catalogue.Models.Song
+
+@{
+    ViewData["Title"] = "Song Details";
+}
+
+<h2>Song Details</h2>
+
+<div>
+    <h4>@Model.Title</h4>
+    <p><strong>Duration:</strong> @Model.Duration</p>
+    <p><strong>Album:</strong> <a asp-controller="Albums" asp-action="Details" asp-route-id="@Model.AlbumId">@Model.Album.Title</a></p>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.SongId" class="btn btn-warning">Edit</a>
+<a asp-action="Index" asp-route-albumId="@Model.AlbumId" class="btn btn-secondary">Back to Songs</a>

@@ -1,0 +1,28 @@
+@model band_catalogue.Models.Album
+
+<h2>Add Album</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReleaseYear" class="control-label"></label>
+        <input asp-for="ReleaseYear" class="form-control" />
+        <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BandId" class="control-label">Band</label>
+        <select asp-for="BandId" class="form-control" asp-items="ViewBag.Bands">
+            <option value="">-- Select a Band --</option> <!-- Prevent empty selection -->
+        </select>
+        <span asp-validation-for="BandId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Album</button>
+</form>
+
