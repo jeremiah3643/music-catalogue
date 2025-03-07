@@ -23,7 +23,7 @@ Band Catalogue is a **C# ASP.NET MVC web application** that allows users to mana
 
 ### 1. Clone the Repository
 ```sh
-git clone https://github.com/YOUR_GITHUB_USERNAME/band-catalogue.git
+git clone https://github.com/jeremiah3643/music-catalogue.git
 cd band-catalogue
 ```
 
